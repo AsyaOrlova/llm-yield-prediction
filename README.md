@@ -32,6 +32,13 @@ Example of the config file is provided in the folder.
 
 If you want to run multiple experiments in one pipeline, you can create configs with [create_config.py](./few_shot_classifier/create_config.py), then run the [run_commands.py](./few_shot_classifier/run_commands.py) and gather the obtained experimental parameters and corresponding metrics using the [gather_metrics.py](./few_shot_classifier/gather_metrics.py).
 
+### DeepSeek experiments
+
+The code is provided in [deepseek_exp](./deepseek_exp/)
+
+Example:
+`python main.py deepseek-r1:7b`
+
 ## :pushpin: Analysis of few-shot results
 The notebooks with the few-shot results analysis are provided in the [few_shot_notebooks](./few_shot_notebooks/) folder.  We also provide .csv files with metrics for different experiments, however you can obtain them yourself by reproducing the few-shot experiments as suggested in the previous section.
 
