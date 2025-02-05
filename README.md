@@ -2,7 +2,7 @@
 
 In the ever-expanding field of artificial intelligence, each release of a new large language model (LLM) feels like a drop in the vast ocean of existing models. However, each model possesses distinct characteristics, which often remain underexplored, especially in application to such highly-specialized areas as chemistry. In this study, we consider chemical reaction yield prediction as one of the persisting challenges in cheminformatics despite the variety and complexity of machine learning (ML) solutions proposed. We investigate performance and properties of large language models in the context of this complex task. For that, we engineer four different chemical reaction datasets, select top-rated generalist LLMs, and systematically evaluate their performance. We demonstrate that Mistral Small and Claude 3 Haiku, whose significance has been diminished with emergence of newer models, systematically deliver state-of-the-art performance in few-shot setups, surpassing baselines by up to 3% in accuracy and F1-score. Moreover, we discover superior performance of ML models trained on LLM embeddings and find evidence of yield-relevant information encoded in them. Strikingly, we observe that some general-purpose LLMs outperform those models specifically trained on chemical data. These findings allude to the number of underexplored properties of an individual LLM, as an ocean in the drop.
 
-![alt text](./images/emb_gradient.jpg)
+![alt text](./images/embs_all.jpg)
 
 ## :pushpin: Preparation of datasets
 The notebooks regarding datasets preparation process can be found in the [datasets_prep_notebooks](./datasets_prep_notebooks) folder. The resulting USPTO-R, USPTO-C, ORD-R and ORD-C datasets as well as USPTO-R based datasets with different train sizes are provided in the [data](./data) folder for your convenience.
@@ -37,7 +37,7 @@ The notebooks with the few-shot results analysis are provided in the [few_shot_n
 
 ## :pushpin: LLM embeddings extraction
 
-The code needed to extract reactions embeddings from text-embedding-3-large (OpenAI) and Mistral 7B (MistralAI) is provided in [openai_emb_gen](./openai_emb_gen/) and [mistralai_emb_gen](./mistralai_emb_gen/) folders.
+The code for extraction of reactions embeddings from text-embedding-3-large (OpenAI) and Mistral 7B (MistralAI) is provided in [openai_emb_gen](./openai_emb_gen/) and [mistralai_emb_gen](./mistralai_emb_gen/) folders.
 
 ### OpenAI embeddings extraction
 
@@ -52,9 +52,15 @@ The code needed to extract reactions embeddings from text-embedding-3-large (Ope
 2. `python cli.py <path_to_dataset.csv>`
 3. Output in result.json.
 
-### LLaMA embeddings extraction
+### LLaMA experiments
 
+The code for extraction of LLaMA embeddings and few-shot experiments is provided in [llama_exp](./llama_exp/).
 
+Examples:
+
+`python llama_embs.py ./data/USPTO_R_text.csv reaction`
+
+`python llama_fewshot.py ./data/USPTO_R_text.csv reaction llama3.1:8b USPTO_R_results.csv text`
 
 ## :pushpin: Training XGB on DRFPs and LLM embeddings
 

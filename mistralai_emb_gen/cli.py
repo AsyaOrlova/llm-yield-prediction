@@ -18,7 +18,7 @@ with torch.no_grad():
   for idx in tqdm.tqdm(df.index):
     reaction = df.loc[idx, 'reaction']
     enc = tokenizer(reaction, return_tensors="pt", truncation=True, max_length=512).to(device)
-    emb = model(**enc).last_hidden_state.cpu()[0][-1]
+    emb = model(**enc)[0].last_hidden_state.cpu()[0][-1]
     results.append({
            "input": reaction,
            "embedding": emb.tolist()
