@@ -1,10 +1,8 @@
-# Are Large Language Models the Best Estimators of Chemical Reaction Yields?
+# Ocean in a Drop: Underexplored Capabilities of Large Language Models in Chemistry
 
-Chemical reaction yield, defined as the percentage of reactants turned into products, is the main criterion for selecting reaction conditions and evaluating success of a synthesis. Various machine learning (ML) models have been reported to predict reaction yields based on high-throughput experiment datasets. However, in the face of sparse and insufficient data typical for regular laboratory experiments, the performance and applicability of such models remain limited. More recently, the capabilities of large language models (LLMs) have been explored in predictive chemistry. Following up on this work, ***we investigate how LLMs perform in the generalized yield prediction task treated as a binary classification problem***. In this regard, we engineer four different chemical reaction datasets to systematically evaluate performance of the top rated LLMs. We demonstrate that in the few-shot classification task LLMs outperform baseline approaches in F1-score up to 9\% and show competitive performance in terms of accuracy. Moreover, we observe superiority of ML models trained on LLM embeddings with the best average accuracy of 0.70 versus 0.67 achieved with current state-of-the-art approaches on the USPTO data. In this context, we discuss the potential of LLM embeddings to become the new state-of-the-art chemical reaction representations. Additionally, we share our empirical results on practical aspects of the few-shot LLM classifiers, such as the optimal size of the training set, and discuss peculiarities and prospects of the proposed methods.
+In the ever-expanding field of artificial intelligence, each release of a new large language model (LLM) feels like a drop in the vast ocean of existing models. However, each model possesses distinct characteristics, which often remain underexplored, especially in application to such highly-specialized areas as chemistry. In this study, we consider chemical reaction yield prediction as one of the persisting challenges in cheminformatics despite the variety and complexity of machine learning (ML) solutions proposed. We investigate performance and properties of large language models in the context of this complex task. For that, we engineer four different chemical reaction datasets, select top-rated generalist LLMs, and systematically evaluate their performance. We demonstrate that Mistral Small and Claude 3 Haiku, whose significance has been diminished with emergence of newer models, systematically deliver state-of-the-art performance in few-shot setups, surpassing baselines by up to 3% in accuracy and F1-score. Moreover, we discover superior performance of ML models trained on LLM embeddings and find evidence of yield-relevant information encoded in them. Strikingly, we observe that some general-purpose LLMs outperform those models specifically trained on chemical data. These findings allude to the number of underexplored properties of an individual LLM, as an ocean in the drop.
 
 ![alt text](./images/emb_gradient.jpg)
-
-This repository complements our study submitted to NeurIPS 2024. Below you can see the steps needed to reproduce paper results.
 
 ## :pushpin: Preparation of datasets
 The notebooks regarding datasets preparation process can be found in the [datasets_prep_notebooks](./datasets_prep_notebooks) folder. The resulting USPTO-R, USPTO-C, ORD-R and ORD-C datasets as well as USPTO-R based datasets with different train sizes are provided in the [data](./data) folder for your convenience.
@@ -53,6 +51,10 @@ The code needed to extract reactions embeddings from text-embedding-3-large (Ope
 1. `pip install -r requirements.txt`
 2. `python cli.py <path_to_dataset.csv>`
 3. Output in result.json.
+
+### LLaMA embeddings extraction
+
+
 
 ## :pushpin: Training XGB on DRFPs and LLM embeddings
 
