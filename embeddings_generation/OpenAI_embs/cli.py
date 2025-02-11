@@ -43,4 +43,4 @@ for i, (data,) in tqdm(df.iterrows(), total=df.shape[0]):
         "embedding": res
     })
     time.sleep(0.3)
-json.dump(output, open(f"{argv[1]}.json", "w", encoding="utf-8"))
+json.dump(output, open(f"{argv[1][:-4]}.json", "w", encoding="utf-8"))

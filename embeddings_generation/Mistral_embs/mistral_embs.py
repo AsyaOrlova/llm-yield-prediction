@@ -6,6 +6,7 @@ import tqdm
 from sys import argv
 
 dataset_path = argv[1]
+column = argv[2]
 
 df = pd.read_csv(dataset_path)
 
@@ -16,7 +17,7 @@ with torch.no_grad():
   tokenizer = AutoTokenizer.from_pretrained('mistralai/Mistral-7B-v0.1')
   results = []
   for idx in tqdm.tqdm(df.index):
-    reaction = df.loc[idx, 'reaction']
+    reaction = df.loc[idx, column]
     enc = tokenizer(reaction, return_tensors="pt", truncation=True, max_length=512).to(device)
     emb = model(**enc)[0].last_hidden_state.cpu()[0][-1]
     results.append({

@@ -6,13 +6,13 @@ import pandas as pd
 from random import choices, seed
 from tqdm import tqdm
 
-
-data = pd.read_csv("./data/USPTO_R_text_clf.csv")
+data_path = argv[1]
+data = pd.read_csv(data_path)
 pred_data = data.loc[data["split"] == "test"]
 shot_data = data.loc[data["split"] == "train"]
 
 # ollama start up
-model = argv[1]
+model = argv[2]
 
 print("="*50, "launching OLLAMA", "="*50)
 server_process = subprocess.Popen(['ollama', 'serve'])
@@ -21,8 +21,6 @@ print("="*50, "OLLAMA is ready", "="*50)
 # client sync
 
 client = Client(host='host')
-
-
 
 # download model if it does not exist
 print("="*50, "downloading model", "="*50)
@@ -40,15 +38,13 @@ system_message = {
                  " 'Not high-yielding' means the yield rate of the reaction is below 70%."
                  " You will be provided with several examples of reactions and corresponding yield rates."
                  " Please answer with only 'High-yielding' or 'Not high-yielding', no other information can be "
-                 "provided, do not write anything else."
+                 "provided."
 }
 
 print("="*50, "start PREDICTION", "="*50)
 result = []
 for ns in [i * 2 for i in range(5, 6, 1)]:
     for sd in [36, 42, 84, 200, 12345]:
-        if ns == 10 and sd in [36, 42, 84]:
-            continue
         for pred_sample in tqdm(pred_data.iterrows(), total=len(pred_data)):
             messages = [system_message]
             seed(sd)

@@ -1,8 +1,6 @@
 from langchain_ollama import OllamaEmbeddings
 from sys import argv
 import pandas as pd
-from tqdm import tqdm
-import json
 import numpy as np
 
 dataset_path = argv[1]
