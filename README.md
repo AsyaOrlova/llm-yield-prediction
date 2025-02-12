@@ -4,6 +4,11 @@ In the ever-expanding field of artificial intelligence, each release of a new la
 
 ![alt text](./images/embs_all.jpg)
 
+## Prerequisites
+
+- For experiments with LLaMA and DeepSeek models [Ollama](https://ollama.com/download) should be installed and running
+- Pull a model to use with the library: `ollama pull <model>` e.g. `ollama pull llama3.1:8b`
+
 ## :pushpin: Preparation of datasets
 The notebooks regarding datasets preparation process can be found in the [datasets_prep_notebooks](./datasets_prep_notebooks) folder. The resulting USPTO-R, USPTO-C, ORD-R and ORD-C datasets as well as USPTO-R based datasets with different train sizes are provided in the [data](./data) folder for your convenience.
 
