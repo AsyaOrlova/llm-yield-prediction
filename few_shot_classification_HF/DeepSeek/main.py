@@ -14,6 +14,8 @@ shot_data = data.loc[data["split"] == "train"]
 # ollama start up
 model = argv[2]
 
+column = argv[3]
+
 print("="*50, "launching OLLAMA", "="*50)
 server_process = subprocess.Popen(['ollama', 'serve'])
 time.sleep(10)
@@ -48,7 +50,7 @@ for ns in [i * 2 for i in range(5, 6, 1)]:
         for pred_sample in tqdm(pred_data.iterrows(), total=len(pred_data)):
             messages = [system_message]
             seed(sd)
-            for sentences, high_yielding in choices(list(map(lambda x: (x[1]["sentences"], x[1]["high_yielding"]),
+            for sentences, high_yielding in choices(list(map(lambda x: (x[1][column], x[1]["high_yielding"]),
                                                              shot_data.iterrows())), k=ns):
                 messages.append({
                     "role": "user",
@@ -61,11 +63,11 @@ for ns in [i * 2 for i in range(5, 6, 1)]:
 
             messages.append({
                 "role": "user",
-                "content": pred_sample[1]["sentences"]
+                "content": pred_sample[1][column]
             })
 
             response = client.chat(model=f"{model.split(':')[0]}-t1", messages=messages)
-            result.append((pred_sample[1]["sentences"], response.message.content.split("</think>")[-1].strip()))
+            result.append((pred_sample[1][column], response.message.content.split("</think>")[-1].strip()))
         with open(f"result_shots{ns}_seed{sd}.txt", "w", encoding="utf-8") as file:
             for s, r in result:
                 file.write(f"{s.replace('\n', '\\n')}\t{r.replace('\n', '\\n')}\n")
