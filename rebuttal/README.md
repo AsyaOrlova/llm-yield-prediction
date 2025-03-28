@@ -14,7 +14,7 @@ In addition to our regression experiments provided in Appendix A.1, we tested LL
 
 The comparison of obtained results with baselines is provided below:
 
-<img src="./llm_regression.jpg" width="400">
+![](./llm_regression.jpg)
 
 **Conclusion:**
 
@@ -27,7 +27,7 @@ To compare chemical LLMs directly with generalist LLMs in the few-shot setting, 
 Note: Despite changes in prompts and model configuration, Galactica-6.7B consistently responded with the same yield category, producing the same metrcis across all k values.
 The results are provided below:
 
-![alt text](./chem_llm_fewshot.jpg)
+![](./chem_llm_fewshot.jpg)
 
 Conclusion:
 It can be observed that in the few-shot setting generalist LLMs still outperform chemical LLMs in most cases. The best accuracy=0.61 achieved by Mistral Small (k=6) is 11% higher than the best result achieved by chemical LLMs (accuracy=0.5 by Galactica-6.7B). Also, results of chemical LLMs in few-shot setting (represented in Table 2 of the main text) are comparable with few-shot results, which demonstrates the appropriateness of initial experimental design.
