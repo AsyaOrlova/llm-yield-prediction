@@ -29,5 +29,6 @@ The results are provided below:
 
 ![](./chem_llm_fewshot.jpg)
 
-Conclusion:
+**Conclusion:**
+
 It can be observed that in the few-shot setting generalist LLMs still outperform chemical LLMs in most cases. The best accuracy=0.61 achieved by Mistral Small (k=6) is 11% higher than the best result achieved by chemical LLMs (accuracy=0.5 by Galactica-6.7B). Also, results of chemical LLMs in few-shot setting (represented in Table 2 of the main text) are comparable with few-shot results, which demonstrates the appropriateness of initial experimental design.
