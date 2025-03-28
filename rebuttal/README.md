@@ -15,14 +15,11 @@ In addition to our regression experiments provided in Appendix A.1, we tested LL
 The comparison of obtained results with baselines is provided below:
 
 |                             |           USPTO-R           |
-|-----------------------------|--------------|--------------|
 |                             |      R2      |     RMSE     |
-|-----------------------------|--------------|--------------|
 | Yield-BERT                  | -0.03        | 25.91        |
 | T5Chem                      | -15.53       | 103.47       |
 | Egret                       | -0.16        | 27.51        |
 | DRFP + XGB                  | -0.03 ± 0.01 | 25.90 ± 0.16 |
-|-----------------------------|--------------|--------------|
 | Claude 3 Haiku (k=2)        | -0.14 ± 0.14 | 27.22 ± 1.64 |
 | Claude 3 Haiku (k=4)        | -0.13 ± 0.13 | 27.11 ± 1.46 |
 | Claude 3 Haiku (k=6)        | -0.10 ± 0.08 | 26.82 ± 0.91 |
@@ -50,4 +47,4 @@ The results are provided below:
 | Mistral Small    |   0.51 ± 0.00   |   0.66 ± 0.00   | **0.59 ± 0.03** |   0.60 ± 0.04   | **0.61 ± 0.02** |   0.63 ± 0.04   | **0.56 ± 0.03** |   0.62 ± 0.02   | **0.57 ± 0.03** |   0.61 ± 0.05   |
 
 Conclusion:
-I can be observed that in the few-shot setting generalist LLMs still outperform chemical LLMs in most cases. The best accuracy=0.61 achieved by Mistral Small (k=6) is 11% higher than the best result achieved by chemical LLMs (accuracy=0.5 by Galactica-6.7B).
+It can be observed that in the few-shot setting generalist LLMs still outperform chemical LLMs in most cases. The best accuracy=0.61 achieved by Mistral Small (k=6) is 11% higher than the best result achieved by chemical LLMs (accuracy=0.5 by Galactica-6.7B).
