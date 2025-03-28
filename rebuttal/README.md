@@ -14,37 +14,20 @@ In addition to our regression experiments provided in Appendix A.1, we tested LL
 
 The comparison of obtained results with baselines is provided below:
 
-|                             |           USPTO-R           |
-|                             |      R2      |     RMSE     |
-| Yield-BERT                  | -0.03        | 25.91        |
-| T5Chem                      | -15.53       | 103.47       |
-| Egret                       | -0.16        | 27.51        |
-| DRFP + XGB                  | -0.03 ± 0.01 | 25.90 ± 0.16 |
-| Claude 3 Haiku (k=2)        | -0.14 ± 0.14 | 27.22 ± 1.64 |
-| Claude 3 Haiku (k=4)        | -0.13 ± 0.13 | 27.11 ± 1.46 |
-| Claude 3 Haiku (k=6)        | -0.10 ± 0.08 | 26.82 ± 0.91 |
-| Claude 3 Haiku (k=8)        | -0.07 ± 0.08 | 26.37 ± 1.04 |
-| Claude 3 Haiku (k=10)       | -0.10 ± 0.08 | 26.80 ± 0.94 |
-| Mistral 7B embeddings + XGB |  **0.06 ± 0.00** | **24.71 ± 0.03** |
+<img src="./llm_regression.jpg" width="400">
 
 **Conclusion:**
 
-Since the regression problem is challenging, LLMs do not provide impressive performance similarly to baselines.
+The difficulty of precise reaction yield prediction is confirmed by modest performance of all compared models.
 However, we would like to highlight that Mistral 7B embeddings achieve best performance among other approaches, which again emphasizes the ability of LLM embeddings to become novel SOTA reaction representations.
 
 ## How chemical LLMs compare to generalist LLMs?
 
-To compare chemical LLMs directly with generalist LLMs in the few-shot setting, we conducted additional **few-shot experiments with chemical LLMs** on the USPTO-R dataset. Despite changes in prompts and model configuration, Galactica-6.7B consistently responded with the same yield category, producing the same metrcis across all k values.
+To compare chemical LLMs directly with generalist LLMs in the few-shot setting, we conducted additional **few-shot experiments with chemical LLMs** on the USPTO-R dataset. 
+Note: Despite changes in prompts and model configuration, Galactica-6.7B consistently responded with the same yield category, producing the same metrcis across all k values.
 The results are provided below:
 
-|                  |        2        |                 |        4        |                 |        6        |                 |        8        |                 |        10       |                 |
-|------------------|:---------------:|:---------------:|:---------------:|:---------------:|:---------------:|:---------------:|:---------------:|:---------------:|:---------------:|:---------------:|
-|                  | Accuracy        | F1-score        | Accuracy        | F1-score        | Accuracy        | F1-score        | Accuracy        | F1-score        | Accuracy        | F1-score        |
-| ChemDFM-v1.0-13B |   0.47 ± 0.05   |   0.41 ± 0.09   |   0.44 ± 0.04   |   0.41 ± 0.18   |   0.49 ± 0.03   |   0.57 ± 0.09   |   0.45 ± 0.05   |   0.43 ± 0.12   |   0.50 ± 0.05   |   0.45 ± 0.23   |
-| Galactica-6.7B   |   0.50 ± 0.00   |   0.67 ± 0.00   |   0.50 ± 0.00   | **0.67 ± 0.00** |   0.50 ± 0.00   | **0.67 ± 0.00** |   0.50 ± 0.00   |   0.67 ± 0.00   |   0.50 ± 0.00   | **0.67 ± 0.00** |
-| ChemLLM-7B-Chat  |   0.33 ± 0.01   |   0.49 ± 0.01   |   0.32 ± 0.02   |   0.49 ± 0.02   |   0.35 ± 0.03   |   0.52 ± 0.03   |    0.4 ± 0.03   |   0.57 ± 0.03   |   0.44 ± 0.03   |   0.60 ± 0.03   |
-| Claude 3 Haiku   | **0.52 ± 0.00** | **0.68 ± 0.00** |   0.57 ± 0.02   |   0.59 ± 0.04   |   0.55 ± 0.02   |   0.67 ± 0.02   |   0.54 ± 0.03   | **0.68 ± 0.01** |   0.53 ± 0.01   |   0.65 ± 0.03   |
-| Mistral Small    |   0.51 ± 0.00   |   0.66 ± 0.00   | **0.59 ± 0.03** |   0.60 ± 0.04   | **0.61 ± 0.02** |   0.63 ± 0.04   | **0.56 ± 0.03** |   0.62 ± 0.02   | **0.57 ± 0.03** |   0.61 ± 0.05   |
+![alt text](./chem_llm_fewshot.jpg)
 
 Conclusion:
-It can be observed that in the few-shot setting generalist LLMs still outperform chemical LLMs in most cases. The best accuracy=0.61 achieved by Mistral Small (k=6) is 11% higher than the best result achieved by chemical LLMs (accuracy=0.5 by Galactica-6.7B).
+It can be observed that in the few-shot setting generalist LLMs still outperform chemical LLMs in most cases. The best accuracy=0.61 achieved by Mistral Small (k=6) is 11% higher than the best result achieved by chemical LLMs (accuracy=0.5 by Galactica-6.7B). Also, results of chemical LLMs in few-shot setting (represented in Table 2 of the main text) are comparable with few-shot results, which demonstrates the appropriateness of initial experimental design.
