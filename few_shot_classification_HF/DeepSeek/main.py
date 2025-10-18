@@ -1,20 +1,28 @@
 import subprocess
 import time
 from ollama import Client
-from sys import argv
+import argparse
 import pandas as pd
 from random import choices, seed
 from tqdm import tqdm
+import logging
 
-data_path = argv[1]
+
+logging.basicConfig(filename = 'llm_logs.log', level=logging.INFO,
+                    format='%(asctime)s - %(message)s')
+logger = logging.getLogger(__name__)
+parser = argparse.ArgumentParser()
+
+parser.add_argument('data_path', type=str, help='Путь к данным c реакциями')
+parser.add_argument('model', type=str, help='Название модели')
+
+args = parser.parse_args()
+data_path: str = args.data_path
+model: str = args.model
+
 data = pd.read_csv(data_path)
 pred_data = data.loc[data["split"] == "test"]
 shot_data = data.loc[data["split"] == "train"]
-
-# ollama start up
-model = argv[2]
-
-column = argv[3]
 
 print("="*50, "launching OLLAMA", "="*50)
 server_process = subprocess.Popen(['ollama', 'serve'])
@@ -26,9 +34,11 @@ client = Client(host='host')
 
 # download model if it does not exist
 print("="*50, "downloading model", "="*50)
+logging.info(f"Downloading model {model}")
 client.pull(model)
 client.create(model=f"{model.split(':')[0]}-t1", parameters={"temperature": 0.1}, from_=model)
 print("="*50, "model downloaded", "="*50)
+logging.info("Model successfully downloaded!")
 
 # system instructions
 system_message = {
@@ -45,31 +55,40 @@ system_message = {
 
 print("="*50, "start PREDICTION", "="*50)
 result = []
-for ns in [i * 2 for i in range(5, 6, 1)]:
-    for sd in [36, 42, 84, 200, 12345]:
-        for pred_sample in tqdm(pred_data.iterrows(), total=len(pred_data)):
+for number_of_shots in range(2, 10, 2):
+    for random_seed in [36, 42, 84, 200, 12345]:
+        for _, test_sample in tqdm(pred_data.iterrows(), total=len(pred_data)):
+            test_sample = test_sample['reactions']
             messages = [system_message]
-            seed(sd)
-            for sentences, high_yielding in choices(list(map(lambda x: (x[1][column], x[1]["high_yielding"]),
-                                                             shot_data.iterrows())), k=ns):
+            seed(random_seed)
+            for sentences, high_yielding in choices([(row['reactions'], row["high_yielding"])
+                                                     for _, row in shot_data.iterrows()],
+                                                    k=number_of_shots):
+
+                high_yielding = "High-yielding" if int(high_yielding) == 1 else "Not high-yielding"
+                logging.info(f"Input: {sentences} - {high_yielding}")
+
                 messages.append({
                     "role": "user",
                     "content": sentences
                 })
                 messages.append({
                     "role": "assistant",
-                    "content": "high-yielding" if int(high_yielding) == 1 else "not high-yielding"
+                    "content": high_yielding
                 })
 
             messages.append({
                 "role": "user",
-                "content": pred_sample[1][column]
+                "content": test_sample
             })
 
-            response = client.chat(model=f"{model.split(':')[0]}-t1", messages=messages)
-            result.append((pred_sample[1][column], response.message.content.split("</think>")[-1].strip()))
-        with open(f"result_shots{ns}_seed{sd}.txt", "w", encoding="utf-8") as file:
-            for s, r in result:
-                file.write(f"{s.replace('\n', '\\n')}\t{r.replace('\n', '\\n')}\n")
+            dirty_response = client.chat(model=f"{model.split(':')[0]}-t1", messages=messages)
+            llm_answer = dirty_response.message.content.split("</think>")[-1].strip().replace('\n', '\\n')
+
+            logger.info(f'LLM answer: {llm_answer}')
+            result.append(f"{test_sample}\t{llm_answer}")
+
+        with open(f"result_shots{number_of_shots}_seed{random_seed}.txt", "w", encoding="utf-8") as file:
+            file.write('\n'.join(result))
         result.clear()
 
