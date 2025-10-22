@@ -10,7 +10,7 @@ import logging
 
 logging.basicConfig(filename = 'llm_logs.log', level=logging.INFO,
                     format='%(asctime)s - %(message)s')
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('llm_logs')
 parser = argparse.ArgumentParser()
 
 parser.add_argument('data_path', type=str, help='Путь к данным c реакциями')
@@ -30,6 +30,7 @@ time.sleep(10)
 print("="*50, "OLLAMA is ready", "="*50)
 # client sync
 
+# NEED TO BE CHANGED TO OLLAMA HOST
 client = Client(host='host')
 
 # download model if it does not exist
@@ -55,13 +56,13 @@ system_message = {
 
 print("="*50, "start PREDICTION", "="*50)
 result = []
-for number_of_shots in range(2, 10, 2):
+for number_of_shots in range(2, 12, 2):
     for random_seed in [36, 42, 84, 200, 12345]:
         for _, test_sample in tqdm(pred_data.iterrows(), total=len(pred_data)):
-            test_sample = test_sample['reactions']
+            test_sample = test_sample['reaction']
             messages = [system_message]
             seed(random_seed)
-            for sentences, high_yielding in choices([(row['reactions'], row["high_yielding"])
+            for sentences, high_yielding in choices([(row['reaction'], row["high_yielding"])
                                                      for _, row in shot_data.iterrows()],
                                                     k=number_of_shots):
 
@@ -76,7 +77,6 @@ for number_of_shots in range(2, 10, 2):
                     "role": "assistant",
                     "content": high_yielding
                 })
-
             messages.append({
                 "role": "user",
                 "content": test_sample
@@ -91,4 +91,3 @@ for number_of_shots in range(2, 10, 2):
         with open(f"result_shots{number_of_shots}_seed{random_seed}.txt", "w", encoding="utf-8") as file:
             file.write('\n'.join(result))
         result.clear()
-
