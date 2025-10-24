@@ -79,10 +79,9 @@ for number_of_shots in range(2, 12, 2):
             dirty_response = client.chat(model=f"{model.split(':')[0]}-t1", messages=messages)
             llm_answer = dirty_response.message.content.split("</think>")[-1].strip().replace('\n', '\\n')
 
-            result.append({'test_sample' : test_sample,
-                           'real_answer': test_sample_class,
-                           'llm_answer' : llm_answer})
+            result.append(llm_answer)
 
-        df = pd.DataFrame(result)
-        df.to_csv(f"Results/result_shots{number_of_shots}_seed{random_seed}.csv", index=False)
+        pred_data[f'seed_{random_seed}'] = result
         result.clear()
+
+    pred_data.to_csv(f"Results/result_shots_{number_of_shots}.csv", index=False)
