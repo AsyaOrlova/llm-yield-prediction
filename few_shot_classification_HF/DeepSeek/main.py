@@ -5,7 +5,7 @@ import argparse
 from random import choices, seed
 from tqdm import tqdm
 import pandas as pd
-
+import os
 
 parser = argparse.ArgumentParser()
 
@@ -20,14 +20,15 @@ data = pd.read_csv(data_path)
 pred_data = data.loc[data["split"] == "test"]
 shot_data = data.loc[data["split"] == "train"]
 
+custom_port = 12345
+os.environ['OLLAMA_HOST'] = f'localhost:{custom_port}'
+
 print("="*50, "launching OLLAMA", "="*50)
 server_process = subprocess.Popen(['ollama', 'serve'])
 time.sleep(10)
 print("="*50, "OLLAMA is ready", "="*50)
-# client sync
 
-# NEED TO BE CHANGED TO OLLAMA HOST
-client = Client(host='127.0.0.1:11434')
+client = Client(host=f'localhost:{custom_port}')
 
 # download model if it does not exist
 print("="*50, "downloading model", "="*50)
@@ -50,11 +51,13 @@ system_message = {
 
 print("="*50, "start PREDICTION", "="*50)
 result = []
+os.makedirs(f'Results/{model}', exist_ok=True)
 for number_of_shots in range(2, 12, 2):
     for random_seed in [36, 42, 84, 200, 12345]:
-        for _, test_sample in tqdm(pred_data.iterrows(), total=len(pred_data)):
-            test_sample = test_sample['reaction']
-            test_sample_class = "High-yielding" if int(test_sample['high_yielding']) == 1 else "Not high-yielding"
+        for _, test_row in tqdm(pred_data.iterrows(), total=len(pred_data)):
+            test_sample_class = "High-yielding" if int(test_row['high_yielding']) == 1 else "Not high-yielding"
+            test_sample = test_row['reaction']
+
             messages = [system_message]
             seed(random_seed)
             for sentences, high_yielding in choices([(row['reaction'], row["high_yielding"])
@@ -84,4 +87,4 @@ for number_of_shots in range(2, 12, 2):
         pred_data[f'seed_{random_seed}'] = result
         result.clear()
 
-    pred_data.to_csv(f"Results/result_shots_{number_of_shots}.csv", index=False)
+    pred_data.to_csv(f"Results/{model}/result_shots_{number_of_shots}.csv", index=False)
