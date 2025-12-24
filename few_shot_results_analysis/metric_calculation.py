@@ -5,18 +5,17 @@ import pandas as pd
 import numpy as np
 
 class MetricCalculation:
-    __high_yield_patterns = ['high-yielding', 'high yielding', 'high yield']
+    __high_yield_patterns = ['not high-yielding', 'not high yielding', 'not high yield']
 
 
-    @classmethod
-    def calculate_aggregate_metrics(cls, df_path: str) -> dict:
+    def calculate_aggregate_metrics(self, df_path: str) -> dict:
         df = pd.read_csv(df_path)
         pred_columns = [col for col in df.columns if 'seed' in col]
         accuracy_list = []
         f1_list = []
         for pred_column in pred_columns:
-            df = cls._preprocess_columns(df, pred_column)
-            acc, f1 = cls._calculate_metrics_from_df(df, pred_column, 'high_yielding')
+            df = self._preprocess_columns(df, pred_column)
+            acc, f1 = self._calculate_metrics_from_df(df, pred_column, 'high_yielding')
             accuracy_list.append(acc)
             f1_list.append(f1)
 
@@ -41,8 +40,9 @@ class MetricCalculation:
 
 
 if __name__ == '__main__':
-    result_folder = 'папка с резами'
+    result_folder = 'Mistral'
     for file in os.listdir(result_folder):
         file_path = os.path.join(result_folder, file)
-        results = MetricCalculation.calculate_aggregate_metrics(file_path)
+        mc = MetricCalculation()
+        results = mc.calculate_aggregate_metrics(file_path)
         print(f'{file} - {results}')
